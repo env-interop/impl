@@ -10,26 +10,38 @@ class EnvSetter implements EnvSetterService
     /**
      * @inheritdoc
      */
+    public function addEnv(
+        string $name,
+        null|bool|int|float|string $value,
+    ) : void
+    {
+        if (! isset($_ENV[$name]) && $value !== null) {
+            $_ENV[$name] = $this->castToString($value);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setEnv(
         string $name,
         null|bool|int|float|string $value,
-        bool $override = false
     ) : void
     {
-        if (isset($_ENV[$name]) && ! $override) {
-            return;
-        }
-
         if ($value === null) {
             unset($_ENV[$name]);
             return;
         }
 
+        $_ENV[$name] = $this->castToString($value);
+    }
+
+    protected function castToString(bool|int|float|string $value) : string
+    {
         if (is_bool($value)) {
-            $_ENV[$name] = (string) (int) $value;
-            return;
+            $value = (int) $value;
         }
 
-        $_ENV[$name] = (string) $value;
+        return (string) $value;
     }
 }

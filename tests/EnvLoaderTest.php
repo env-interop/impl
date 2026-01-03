@@ -35,32 +35,16 @@ class EnvLoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($_ENV, $expect);
     }
 
-    public function testLoadEnv_override() : void
+    public function testLoadEnv_notReadable() : void
     {
-        $this->envLoader->loadEnv($this->filename, override: true);
-
-        $expect = [
-            'FOO' => 'override',
-            'INT_THREE' => '3',
-            'BOOL_TRUE' => '1',
-            'BOOL_FALSE' => '0',
-            'FLOAT_PI' => '3.1415',
-            'STRING_EMPTY' => '',
-        ];
-
-        $this->assertSame($_ENV, $expect);
-    }
-
-    public function testLoadEnv_doesNotExist() : void
-    {
-        $this->expectException(EnvException::class);
-        $this->expectExceptionMessage("Env file 'no-such-file' does not exist.");
+        $this->expectException(EnvLoaderException::class);
+        $this->expectExceptionMessage("Could not read env file 'no-such-file'.");
         $this->envLoader->loadEnv('no-such-file');
     }
 
-    public function testLoadEnvIfExists() : void
+    public function testLoadEnvIfReadable() : void
     {
-        $this->envLoader->loadEnvIfExists($this->filename);
+        $this->envLoader->loadEnvIfReadable($this->filename);
 
         $expect = [
             'FOO' => 'original',
@@ -74,18 +58,73 @@ class EnvLoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($_ENV, $expect);
     }
 
-    public function testLoadEnvIfExists_doesNotExist() : void
+    public function testLoadEnvIfReadable_notReadable() : void
     {
-        $this->envLoader->loadEnvIfExists('no-such-file');
-        $this->assertSame(['FOO' => 'original'], $_ENV);
+        $this->envLoader->loadEnvIfReadable('no-such-file');
+        $expect = ['FOO' => 'original'];
+        $this->assertSame($expect, $_ENV);
+    }
+
+    public function testReplaceEnv() : void
+    {
+        $this->envLoader->replaceEnv($this->filename);
+
+        $expect = [
+            'FOO' => 'override',
+            'INT_THREE' => '3',
+            'BOOL_TRUE' => '1',
+            'BOOL_FALSE' => '0',
+            'FLOAT_PI' => '3.1415',
+            'STRING_EMPTY' => '',
+        ];
+
+        $this->assertSame($_ENV, $expect);
+    }
+
+    public function testReplaceEnv_notReadable() : void
+    {
+        $this->expectException(EnvLoaderException::class);
+        $this->expectExceptionMessage("Could not read env file 'no-such-file'.");
+        $this->envLoader->replaceEnv('no-such-file');
+    }
+
+    public function testReplaceEnvIfReadable() : void
+    {
+        $this->envLoader->replaceEnvIfReadable($this->filename);
+
+        $expect = [
+            'FOO' => 'override',
+            'INT_THREE' => '3',
+            'BOOL_TRUE' => '1',
+            'BOOL_FALSE' => '0',
+            'FLOAT_PI' => '3.1415',
+            'STRING_EMPTY' => '',
+        ];
+
+        $this->assertSame($_ENV, $expect);
+    }
+
+    public function testReplaceEnvIfReadable_notReadable() : void
+    {
+        $this->envLoader->replaceEnvIfReadable('no-such-file');
+        $expect = ['FOO' => 'original'];
+        $this->assertSame($expect, $_ENV);
     }
 
     public function testAssertEnv() : void
     {
         $_ENV['FOO'] = 'bar';
-        $this->envLoader->assertEnv(['FOO']);
 
-        $this->expectException(EnvException::class);
+        $this->assertSame(
+            $this->envLoader,
+            $this->envLoader->assertEnv(['FOO']),
+        );
+    }
+
+    public function testAssertEnv_invalid() : void
+    {
+        $_ENV['FOO'] = 'bar';
+        $this->expectException(EnvInvalidException::class);
         $this->expectExceptionMessage("The following environment variables are not set: 'BAR', 'BAZ'");
         $this->envLoader->assertEnv(['FOO', 'BAR', 'BAZ']);
     }

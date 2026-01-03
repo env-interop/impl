@@ -18,15 +18,15 @@ class EnvSetterTest extends \PHPUnit\Framework\TestCase
         $this->envSetter = new EnvSetter();
     }
 
-    public function testSetEnv() : void
+    public function testAddEnv() : void
     {
-        $this->envSetter->setEnv('FOO', 'override');
-        $this->envSetter->setEnv('INT_THREE', 3);
-        $this->envSetter->setEnv('BOOL_TRUE', true);
-        $this->envSetter->setEnv('BOOL_FALSE', false);
-        $this->envSetter->setEnv('FLOAT_PI', 3.1415);
-        $this->envSetter->setEnv('STRING_EMPTY', '');
-        $this->envSetter->setEnv('NULL_UNSET', null);
+        $this->envSetter->addEnv('FOO', 'override');
+        $this->envSetter->addEnv('INT_THREE', 3);
+        $this->envSetter->addEnv('BOOL_TRUE', true);
+        $this->envSetter->addEnv('BOOL_FALSE', false);
+        $this->envSetter->addEnv('FLOAT_PI', 3.1415);
+        $this->envSetter->addEnv('STRING_EMPTY', '');
+        $this->envSetter->addEnv('NULL_UNSET', null);
 
         $expect = [
             'FOO' => 'original',
@@ -40,12 +40,11 @@ class EnvSetterTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($_ENV, $expect);
     }
 
-    public function testSetEnv_override() : void
+    public function testSetEnv() : void
     {
         $this->envSetter->setEnv(
             name: 'FOO',
             value: 'override',
-            override: true,
         );
 
         $expect = [

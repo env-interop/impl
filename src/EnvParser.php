@@ -23,22 +23,29 @@ class EnvParser implements EnvParserService
         if ($parsed === false) {
             $error = error_get_last();
             $message = trim($error['message'] ?? '');
-            throw new EnvException("Could not parse env string: {$message}");
+            throw new EnvParserException("Could not parse env string: {$message}");
         }
 
         foreach ($parsed as $name => $value) {
-            if (! is_null($value) && ! is_scalar($value)) {
-                $message = "Expected env var '"
-                    . $name
-                    . "' to be null or scalar, actually "
-                    . gettype($value)
-                    . ".";
-
-                throw new EnvException($message);
-            }
+            $this->assertValid($name, $value);
         }
 
         /** @var env_parsed_array $parsed */
         return $parsed;
+    }
+
+    protected function assertValid(string $name, mixed $value) : void
+    {
+        if (is_null($value) || is_scalar($value)) {
+            return;
+        }
+
+        $message = "Expected env var '"
+            . $name
+            . "' to be null or scalar, actually "
+            . gettype($value)
+            . ".";
+
+        throw new EnvInvalidException($message);
     }
 }
