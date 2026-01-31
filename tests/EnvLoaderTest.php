@@ -110,22 +110,4 @@ class EnvLoaderTest extends \PHPUnit\Framework\TestCase
         $expect = ['FOO' => 'original'];
         $this->assertSame($expect, $_ENV);
     }
-
-    public function testAssertEnv() : void
-    {
-        $_ENV['FOO'] = 'bar';
-
-        $this->assertSame(
-            $this->envLoader,
-            $this->envLoader->assertEnv(['FOO']),
-        );
-    }
-
-    public function testAssertEnv_invalid() : void
-    {
-        $_ENV['FOO'] = 'bar';
-        $this->expectException(EnvInvalidException::class);
-        $this->expectExceptionMessage("The following environment variables are not set: 'BAR', 'BAZ'");
-        $this->envLoader->assertEnv(['FOO', 'BAR', 'BAZ']);
-    }
 }

@@ -91,27 +91,4 @@ class EnvLoader implements EnvLoaderService
 
         return $this->envParser->parseEnv($contents);
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function assertEnv(array $names = []) : static
-    {
-        foreach ($names as $i => $name) {
-            if (isset($_ENV[$name])) {
-                unset($names[$i]);
-            }
-        }
-
-        if ($names) {
-            $message = "The following environment variables are not set: "
-                . "'"
-                . implode("', '", $names)
-                . "'";
-
-            throw new EnvInvalidException($message);
-        }
-
-        return $this;
-    }
 }
