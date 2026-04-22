@@ -8,20 +8,20 @@ use EnvInterop\Interface\EnvGetter;
 class Env implements EnvGetter
 {
     /**
-     * @var array<string,string>
+     * @var array<array-key,string>
      */
     protected array $vars;
 
     /**
-     * @param array<string,string> $vars
+     * @param array<array-key,string> $vars
      */
     public function __construct(?array $vars = null)
     {
-        /** @var array<string,string> $_ENV */
+        /** @var array<array-key,string> $_ENV */
         $this->vars = $vars ?? $_ENV;
     }
 
-    public function getEnv(string $name) : ?string
+    public function getEnv(int|string $name) : ?string
     {
         return $this->vars[$name] ?? null;
     }
