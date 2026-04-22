@@ -55,4 +55,10 @@ class EnvParserTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("Expected env var 'foo' to be null or scalar, actually array.");
         $this->envParser->parseEnv($envString);
     }
+
+    public function testParseEnv_numericName() : void
+    {
+        $parsed = $this->envParser->parseEnv('123=foo');
+        $this->assertSame([123 => 'foo'], $parsed);
+    }
 }
