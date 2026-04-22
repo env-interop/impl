@@ -34,7 +34,7 @@ class EnvParser implements EnvParserService
         return $parsed;
     }
 
-    protected function assertValid(string $name, mixed $value) : void
+    protected function assertValid(int|string $name, mixed $value) : void
     {
         if (is_null($value) || is_scalar($value)) {
             return;

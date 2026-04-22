@@ -11,7 +11,7 @@ class EnvSetter implements EnvSetterService
      * @inheritdoc
      */
     public function addEnv(
-        string $name,
+        int|string $name,
         null|bool|int|float|string $value,
     ) : void
     {
@@ -24,7 +24,7 @@ class EnvSetter implements EnvSetterService
      * @inheritdoc
      */
     public function setEnv(
-        string $name,
+        int|string $name,
         null|bool|int|float|string $value,
     ) : void
     {
