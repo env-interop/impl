@@ -9,16 +9,10 @@ environment file parsing, and loads only into `$_ENV`.
 ```php
 use EnvInterop\Impl\EnvLoader;
 
-// loads a base required file and an optional local file,
-// then checks that required variables have been loaded.
+// loads a base required file and an optional local file.
 new EnvLoader()
     ->loadEnv('.env.ini')
-    ->loadEnvIfExists('.env.local.ini')
-    ->assertEnv([
-        'PDO_DSN',
-        'PDO_USERNAME',
-        'PDO_PASSWORD',
-    ]);
+    ->loadEnvIfReadable('.env.local.ini');
 ```
 
 The reference implementation for _EnvGetter_ reads from a copy of `$_ENV`.
