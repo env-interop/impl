@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace EnvInterop\Impl;
 
-use PHPUnit\Framework\Attributes\BackupGlobals;
-
 class EnvParserTest extends \PHPUnit\Framework\TestCase
 {
     protected EnvParser $envParser;
