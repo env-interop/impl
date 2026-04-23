@@ -86,7 +86,10 @@ class EnvLoader implements EnvLoaderService
         if (! is_string($contents)) {
             $error = error_get_last();
             $message = trim($error['message'] ?? '');
-            throw new EnvLoaderException("Could not read env file '{$filename}': {$message}");
+
+            throw new EnvLoaderException(
+                "Could not read env file '{$filename}': {$message}",
+            );
         }
 
         return $this->envParser->parseEnv($contents);

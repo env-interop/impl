@@ -42,14 +42,9 @@ class EnvSetterTest extends \PHPUnit\Framework\TestCase
 
     public function testSetEnv() : void
     {
-        $this->envSetter->setEnv(
-            name: 'FOO',
-            value: 'override',
-        );
+        $this->envSetter->setEnv(name: 'FOO', value: 'override');
 
-        $expect = [
-            'FOO' => 'override',
-        ];
+        $expect = ['FOO' => 'override'];
 
         $this->assertSame($_ENV, $expect);
     }

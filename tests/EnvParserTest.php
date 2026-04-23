@@ -37,7 +37,11 @@ class EnvParserTest extends \PHPUnit\Framework\TestCase
     {
         $envString = '^badstring$';
         $this->expectException(EnvParserException::class);
-        $this->expectExceptionMessage("Could not parse env string: syntax error, unexpected '^' in Unknown on line 1");
+
+        $this->expectExceptionMessage(
+            "Could not parse env string: syntax error, unexpected '^' in Unknown on line 1",
+        );
+
         $this->envParser->parseEnv($envString);
     }
 
@@ -50,7 +54,11 @@ class EnvParserTest extends \PHPUnit\Framework\TestCase
         ENVSTRING;
 
         $this->expectException(EnvInvalidException::class);
-        $this->expectExceptionMessage("Expected env var 'foo' to be null or scalar, actually array.");
+
+        $this->expectExceptionMessage(
+            "Expected env var 'foo' to be null or scalar, actually array.",
+        );
+
         $this->envParser->parseEnv($envString);
     }
 
