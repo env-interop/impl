@@ -49,6 +49,12 @@ class EnvSetterTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($_ENV, $expect);
     }
 
+    public function testSetEnv_null() : void
+    {
+        $this->envSetter->setEnv('FOO', null);
+        $this->assertSame([], $_ENV);
+    }
+
     public function testAddEnv_numericName() : void
     {
         $this->envSetter->addEnv(123, 'bar');
