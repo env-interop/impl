@@ -23,6 +23,10 @@ new EnvLoader()
     ->loadEnvIfReadable('.env.local.ini');
 ```
 
+`loadEnv()` and `replaceEnv()` throw `EnvLoaderException` if a file cannot be
+read; the `loadEnvIfReadable()` and `replaceEnvIfReadable()` variants suppress
+that.
+
 Read values from the environment:
 
 ```php
@@ -52,11 +56,15 @@ Parse environment contents directly (INI syntax, via `parse_ini_string()`):
 ```php
 use EnvInterop\Impl\EnvParser;
 
-$parsed = (new EnvParser())->parseEnv(<<<INI
+$parsed = new EnvParser()->parseEnv(<<<INI
     APP_NAME = "example"
     APP_DEBUG = true
     INI);
 ```
+
+`parseEnv()` throws `EnvParserException` on a syntax error, or
+`EnvInvalidException` if a parsed value is not null or scalar (such as the array
+produced by an INI section).
 
 ## Classes
 
@@ -71,6 +79,10 @@ $parsed = (new EnvParser())->parseEnv(<<<INI
 | _EnvInvalidThrowable_  | `EnvInvalidException` |
 
 All classes are in the `EnvInterop\Impl` namespace.
+
+The three exception classes extend `RuntimeException` and implement
+_EnvThrowable_ from the interface package, so catching that single marker
+handles any environment error.
 
 See the [Env-Interop][] interface package for the full specification.
 
