@@ -81,6 +81,13 @@ class EnvLoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($_ENV, $expect);
     }
 
+    public function testReplaceEnv_nullRemovesExisting() : void
+    {
+        $_ENV['NULL_UNSET'] = 'preexisting';
+        $this->envLoader->replaceEnv($this->filename);
+        $this->assertArrayNotHasKey('NULL_UNSET', $_ENV);
+    }
+
     public function testReplaceEnv_notReadable() : void
     {
         $this->expectException(EnvLoaderException::class);

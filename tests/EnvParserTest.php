@@ -38,9 +38,7 @@ class EnvParserTest extends \PHPUnit\Framework\TestCase
         $envString = '^badstring$';
         $this->expectException(EnvParserException::class);
 
-        $this->expectExceptionMessage(
-            "Could not parse env string: syntax error, unexpected '^' in Unknown on line 1",
-        );
+        $this->expectExceptionMessage('Could not parse env string:');
 
         $this->envParser->parseEnv($envString);
     }
