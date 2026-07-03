@@ -13,7 +13,7 @@ composer require env-interop/impl
 
 ## Usage
 
-Load a base environment file, with an optional local override:
+Load a base environment file (INI format), with an optional local override:
 
 ```php
 use EnvInterop\Impl\EnvLoader;
@@ -64,7 +64,7 @@ $parsed = new EnvParser()->parseEnv(<<<INI
 
 `parseEnv()` throws `EnvParserException` on a syntax error, or
 `EnvInvalidException` if a parsed value is not null or scalar (such as the array
-produced by an INI section).
+produced by `key[]=` syntax).
 
 ## Classes
 
